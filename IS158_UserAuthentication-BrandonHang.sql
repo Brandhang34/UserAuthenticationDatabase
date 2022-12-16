@@ -1,0 +1,89 @@
+CREATE DATABASE User_Authentication;
+USE User_Authentication
+
+CREATE TABLE USER_PASSWORD
+(  
+    UserPassID  CHAR(2),
+    UserPassword  VARCHAR(50)  ,
+    Date_Created  DATE  ,
+    PRIMARY KEY (UserPassID)
+);
+CREATE TABLE USER_LOGIN_LOGS
+(  
+    UserLoginID  CHAR(2),
+    Date_LOGGED_IN  DATE  ,
+    PRIMARY KEY (UserLoginID)
+);
+CREATE TABLE PERMISSION
+(  
+    Perm_ID  CHAR(2),
+    Permission VARCHAR(255)  ,
+    PRIMARY KEY (Perm_ID) 
+);
+CREATE TABLE GROUP_PERMISSIONS
+(  
+    GroupID CHAR(2),
+    PERM_ID CHAR(2) ,
+    WhoGrantedPermission VARCHAR(255) ,
+    PRIMARY KEY (GroupID),
+    FOREIGN KEY (PERM_ID) REFERENCES PERMISSION(Perm_ID) 
+);
+CREATE TABLE GROUP_TABLE
+(  
+    GroupID  CHAR(2),
+    Group_Name VARCHAR(25)  ,
+    PRIMARY KEY (GroupID),
+    FOREIGN KEY (GroupID) REFERENCES GROUP_PERMISSIONS(GroupID) 
+);
+CREATE TABLE USERS (
+    ID CHAR(2),
+    GroupID CHAR(5),
+    F_Name varchar(255),
+    L_Name varchar(255),
+    Email varchar(255),
+    UserPassID CHAR(2)  ,
+    UserLoginID CHAR(2)  ,
+    PRIMARY KEY (ID),
+    FOREIGN KEY (UserPassID) REFERENCES USER_PASSWORD(UserPassID),
+    FOREIGN KEY (UserLoginID) REFERENCES USER_LOGIN_LOGS(UserLoginID),
+    FOREIGN KEY (GroupID) REFERENCES GROUP_TABLE(GroupID)
+);
+
+INSERT INTO USER_PASSWORD VALUES ('1', '12345', '2022-05-10');
+INSERT INTO USER_PASSWORD VALUES ('2', 'ABCDEF', '2020-02-09');
+INSERT INTO USER_PASSWORD VALUES ('3', '1234QWER', '2022-09-05');
+INSERT INTO USER_PASSWORD VALUES ('4', '4!3A7c]G8', '2021-12-21');
+INSERT INTO USER_PASSWORD VALUES ('5', 'Cats&Dogs123', '2019-08-30');
+INSERT INTO USER_PASSWORD VALUES ('6', '1Gv7@q6eQM%Im#Mg', '2019-08-30');
+
+INSERT INTO USER_LOGIN_LOGS VALUES ('3', '2022-09-05');
+INSERT INTO USER_LOGIN_LOGS VALUES ('2', '2020-10-23');
+INSERT INTO USER_LOGIN_LOGS VALUES ('4', '2022-05-10');
+INSERT INTO USER_LOGIN_LOGS VALUES ('5', '2019-08-30');
+INSERT INTO USER_LOGIN_LOGS VALUES ('1', '2022-05-11');
+INSERT INTO USER_LOGIN_LOGS VALUES ('6', '2022-05-11');
+
+INSERT INTO PERMISSION VALUES ('P1', 'Access to managing users');
+INSERT INTO PERMISSION VALUES ('P2', 'Access to Financial Reports');
+INSERT INTO PERMISSION VALUES ('P3', 'Access code servers');
+INSERT INTO PERMISSION VALUES ('P4', 'Access Data Files');
+INSERT INTO PERMISSION VALUES ('P5', 'No Access');
+
+INSERT INTO GROUP_PERMISSIONS VALUES ('G1', 'P1', 'Lilya Born');
+INSERT INTO GROUP_PERMISSIONS VALUES ('G2', 'P2', 'Lilya Born');
+INSERT INTO GROUP_PERMISSIONS VALUES ('G3', 'P3', 'Brandon Hang');
+INSERT INTO GROUP_PERMISSIONS VALUES ('G4', 'P4', 'Brandon Hang');
+INSERT INTO GROUP_PERMISSIONS VALUES ('G5', 'P5', 'Brandon Hang');
+
+INSERT INTO GROUP_TABLE VALUES ('G1', 'Administrator');
+INSERT INTO GROUP_TABLE VALUES ('G2', 'Accounting');
+INSERT INTO GROUP_TABLE VALUES ('G3', 'Developer');
+INSERT INTO GROUP_TABLE VALUES ('G4', 'Data Analysts');
+INSERT INTO GROUP_TABLE VALUES ('G5', 'User');
+
+INSERT INTO USERS VALUES ('1', 'G2', 'John', 'Doe', 'jdoe@mail.fresnostate.edu', '1', '1');
+INSERT INTO USERS VALUES ('2', 'G3', 'Ash', 'Ketchum', 'aketchum@mail.fresnostate.edu', '2', '2');
+INSERT INTO USERS VALUES ('3', 'G1', 'Brandon', 'Hang', 'bhang@mail.fresnostate.edu', '3', '3');
+INSERT INTO USERS VALUES ('4', 'G3', 'Jane', 'Thorn', 'jane_thorn@mail.fresnostate.edu', '4', '4');
+INSERT INTO USERS VALUES ('5', 'G2', 'Dwayne', 'Johnson', 'therock@mail.fresnostate.edu', '5', '5');
+INSERT INTO USERS VALUES ('6', 'G1', 'Lilya', 'Born', 'Lborn@gmail.com', '6', '6');
